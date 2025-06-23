@@ -70,7 +70,7 @@ const About = () => {
                   <div className="space-y-1">
                     {skill.techs.map((tech) => (
                       <div key={tech} className="text-sm text-gray-400 font-mono">
-                        <span className="text-green-400">></span> {tech}
+                        <span className="text-green-400">{'>'}</span> {tech}
                       </div>
                     ))}
                   </div>
