@@ -45,7 +45,7 @@ const Hero = () => {
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-mono">
           <span className="bg-gradient-to-r from-green-400 via-cyan-400 to-green-400 bg-clip-text text-transparent">
-            John Developer
+            Jehu Hudson
           </span>
         </h1>
 
@@ -59,15 +59,15 @@ const Hero = () => {
         </div>
 
         <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-          Crafting digital experiences with code, creativity, and endless curiosity. 
-          Specializing in modern web technologies and bringing ideas to life.
+          Passionate and fearless full-stack developer on a mission to make the web more powerful, beautiful, and secure. 
+          Building real platforms that solve actual problems.
         </p>
 
         <div className="flex justify-center space-x-6 mb-16">
           {[
-            { icon: Github, href: "#", label: "GitHub" },
-            { icon: Linkedin, href: "#", label: "LinkedIn" },
-            { icon: Mail, href: "#", label: "Email" }
+            { icon: Github, href: "https://github.com/Jadai123", label: "GitHub" },
+            { icon: Linkedin, href: "#", label: "LinkedIn (Unavailable ATM)" },
+            { icon: Mail, href: "mailto:jehuhudson@gmail.com", label: "Email" }
           ].map(({ icon: Icon, href, label }) => (
             <a
               key={label}
@@ -75,7 +75,7 @@ const Hero = () => {
               className="group relative p-4 rounded-full border border-green-400/30 hover:border-green-400 transition-all duration-300 hover:shadow-lg hover:shadow-green-400/25"
             >
               <Icon className="w-6 h-6 text-gray-400 group-hover:text-green-400 transition-colors" />
-              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                 {label}
               </span>
             </a>

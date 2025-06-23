@@ -3,15 +3,15 @@ import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-rea
 
 const Contact = () => {
   const contactInfo = [
-    { icon: Mail, label: "Email", value: "john@developer.com", href: "mailto:john@developer.com" },
-    { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", href: "tel:+15551234567" },
-    { icon: MapPin, label: "Location", value: "San Francisco, CA", href: "#" }
+    { icon: Mail, label: "Email", value: "jehuhudson@gmail.com", href: "mailto:jehuhudson@gmail.com" },
+    { icon: Phone, label: "Phone", value: "+234 812 763 6057", href: "tel:+2348127636057" },
+    { icon: MapPin, label: "Location", value: "Plateau State, Nigeria", href: "#" }
   ];
 
   const socialLinks = [
-    { icon: Github, href: "#", label: "GitHub" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Twitter, href: "#", label: "Twitter" }
+    { icon: Github, href: "https://github.com/Jadai123", label: "GitHub" },
+    { icon: Linkedin, href: "#", label: "LinkedIn (Unavailable ATM)" },
+    { icon: Twitter, href: "#", label: "Twitter (Unavailable ATM)" }
   ];
 
   return (
@@ -26,7 +26,7 @@ const Contact = () => {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-green-400 to-cyan-400 mx-auto mb-4"></div>
           <p className="text-gray-400 font-mono">
-            // Let's build something amazing together
+            // Let's build something amazing together 🚀
           </p>
         </div>
 
@@ -40,7 +40,7 @@ const Contact = () => {
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <span className="text-gray-400 font-mono text-sm">~/contact-info.json</span>
+                <span className="text-gray-400 font-mono text-sm">~/contact-hudson.json</span>
               </div>
 
               <div className="font-mono text-sm space-y-4">
@@ -149,6 +149,7 @@ const Contact = () => {
               <a
                 key={social.label}
                 href={social.href}
+                title={social.label}
                 className="group p-4 bg-gray-900/30 border border-gray-700 hover:border-green-400/50 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-green-400/25"
               >
                 <social.icon className="w-6 h-6 text-gray-400 group-hover:text-green-400 transition-colors" />
@@ -158,7 +159,7 @@ const Contact = () => {
           
           <div className="font-mono text-gray-400">
             <span className="text-green-400">console.log(</span>
-            "Thanks for visiting! 🚀"
+            "Ready to build what matters! 💥"
             <span className="text-green-400">)</span>
           </div>
         </div>

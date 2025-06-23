@@ -1,34 +1,47 @@
 
-import { ExternalLink, Github, Code, Smartphone, Globe } from "lucide-react";
+import { ExternalLink, Github, Code, Shield, Globe, Users } from "lucide-react";
 
 const Projects = () => {
   const projects = [
     {
-      title: "E-Commerce Platform",
-      description: "Full-stack e-commerce solution with React, Node.js, and Stripe integration",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      icon: Globe,
-      github: "#",
-      live: "#",
-      status: "Production"
+      title: "RevShield",
+      description: "Anti-scam dApp validator for crypto users. A checkpoint between users and potential Web3 traps with auto wallet validation.",
+      tech: ["React", "FastAPI", "Webhooks", "Tailwind"],
+      icon: Shield,
+      github: "Available on request",
+      live: "Coming soon - revshield.site",
+      status: "Development",
+      year: "2025"
     },
     {
-      title: "Task Management App",
-      description: "Real-time collaborative task manager with WebSocket integration",
-      tech: ["Vue.js", "Express", "Socket.io", "PostgreSQL"],
+      title: "Nairaland Edition 2.0",
+      description: "Modern, responsive redesign of Nigeria's most iconic forum with dark mode, sidebar nav, and mobile-first UI.",
+      tech: ["HTML5", "CSS3", "JavaScript", "Node.js"],
+      icon: Users,
+      github: "Available on request",
+      live: "Not yet public",
+      status: "Beta",
+      year: "2024"
+    },
+    {
+      title: "Admin Dashboard Pro",
+      description: "Fully responsive admin panel with auth, route protection, and CRUD operations. Complete user management system.",
+      tech: ["React", "Tailwind", "Shadcn UI", "Node.js"],
       icon: Code,
-      github: "#",
-      live: "#",
-      status: "Beta"
+      github: "github.com/hudson/dashboard-pro",
+      live: "adminpanel.vercel.app",
+      status: "Beta",
+      year: "2024"
     },
     {
-      title: "Mobile Weather App",
-      description: "Cross-platform weather app built with React Native",
-      tech: ["React Native", "TypeScript", "API Integration"],
-      icon: Smartphone,
-      github: "#",
-      live: "#",
-      status: "Development"
+      title: "RevGhost Affiliate Hub",
+      description: "Faceless brand for building high-converting landing pages and affiliate marketing automation in motivation niche.",
+      tech: ["Systeme.io", "Linktree", "Instagram Automation"],
+      icon: Globe,
+      github: "Private Business Model",
+      live: "https://linktr.ee/freedomhubdaily",
+      status: "Production",
+      year: "2024"
     }
   ];
 
@@ -44,11 +57,11 @@ const Projects = () => {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-green-400 to-cyan-400 mx-auto mb-4"></div>
           <p className="text-gray-400 font-mono">
-            // Some of my recent work
+            // Real platforms that solve actual problems 💥
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <div
               key={project.title}
@@ -56,7 +69,10 @@ const Projects = () => {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <project.icon className="w-8 h-8 text-green-400 group-hover:text-cyan-400 transition-colors" />
+                  <div className="flex items-center space-x-3">
+                    <project.icon className="w-8 h-8 text-green-400 group-hover:text-cyan-400 transition-colors" />
+                    <span className="text-xs font-mono text-gray-500">{project.year}</span>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <span className={`px-2 py-1 text-xs font-mono rounded-full ${
                       project.status === "Production" ? "bg-green-400/20 text-green-400" :
@@ -72,7 +88,7 @@ const Projects = () => {
                   {project.title}
                 </h3>
 
-                <p className="text-gray-400 mb-4 leading-relaxed">
+                <p className="text-gray-400 mb-4 leading-relaxed text-sm">
                   {project.description}
                 </p>
 
@@ -87,23 +103,15 @@ const Projects = () => {
                   ))}
                 </div>
 
-                <div className="flex space-x-4">
-                  <a
-                    href={project.github}
-                    className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors group/link"
-                  >
-                    <Github className="w-5 h-5" />
-                    <span className="font-mono text-sm">Code</span>
-                    <ExternalLink className="w-4 h-4 opacity-0 group-hover/link:opacity-100 transition-opacity" />
-                  </a>
-                  <a
-                    href={project.live}
-                    className="flex items-center space-x-2 text-gray-400 hover:text-cyan-400 transition-colors group/link"
-                  >
-                    <Globe className="w-5 h-5" />
-                    <span className="font-mono text-sm">Live</span>
-                    <ExternalLink className="w-4 h-4 opacity-0 group-hover/link:opacity-100 transition-opacity" />
-                  </a>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2 text-gray-400 text-sm">
+                    <Github className="w-4 h-4" />
+                    <span className="font-mono">{project.github}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-400 text-sm">
+                    <Globe className="w-4 h-4" />
+                    <span className="font-mono">{project.live}</span>
+                  </div>
                 </div>
               </div>
 
@@ -113,13 +121,10 @@ const Projects = () => {
         </div>
 
         <div className="text-center mt-12">
-          <a
-            href="#"
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-400 to-cyan-400 text-black font-mono font-bold rounded-lg hover:shadow-lg hover:shadow-green-400/25 transition-all duration-300 group"
-          >
-            <span>View All Projects</span>
-            <ExternalLink className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
+          <div className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-400 to-cyan-400 text-black font-mono font-bold rounded-lg">
+            <span>More projects coming soon...</span>
+            <Code className="w-5 h-5" />
+          </div>
         </div>
       </div>
     </section>

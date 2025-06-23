@@ -1,12 +1,12 @@
 
-import { Code, Database, Globe, Zap } from "lucide-react";
+import { Code, Database, Globe, Zap, Shield, Smartphone } from "lucide-react";
 
 const About = () => {
   const skills = [
-    { name: "Frontend", icon: Globe, techs: ["React", "TypeScript", "Tailwind CSS", "Next.js"] },
-    { name: "Backend", icon: Database, techs: ["Node.js", "Python", "PostgreSQL", "MongoDB"] },
-    { name: "DevOps", icon: Zap, techs: ["Docker", "AWS", "CI/CD", "Kubernetes"] },
-    { name: "Tools", icon: Code, techs: ["Git", "VS Code", "Linux", "Figma"] }
+    { name: "Frontend", icon: Globe, techs: ["React.js", "Tailwind CSS", "Shadcn UI", "HTML5/CSS3", "JavaScript ES6+"] },
+    { name: "Backend", icon: Database, techs: ["Node.js", "Express", "FastAPI", "MongoDB", "Firebase"] },
+    { name: "Tools", icon: Code, techs: ["GitHub", "VS Code", "Vercel", "Render", "Postman"] },
+    { name: "Security", icon: Shield, techs: ["Auth Middleware", "Webhooks", "Web3/dApp", "API Security"] }
   ];
 
   return (
@@ -31,19 +31,27 @@ const About = () => {
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <span className="text-gray-400 font-mono text-sm">~/about-me.md</span>
+                <span className="text-gray-400 font-mono text-sm">~/about-hudson.md</span>
               </div>
-              <div className="font-mono text-sm space-y-2">
+              <div className="font-mono text-sm space-y-3">
                 <div><span className="text-cyan-400">#</span> <span className="text-white">Hello World! 👋</span></div>
                 <div className="text-gray-300 leading-relaxed">
-                  I'm a passionate developer who loves turning complex problems into simple, 
-                  beautiful solutions. With expertise in modern web technologies, I create 
-                  scalable applications that make a difference.
+                  Hi, I'm Hudson — a passionate and fearless full-stack developer, creative thinker, 
+                  and digital builder on a mission to make the web more powerful, beautiful, and secure.
+                </div>
+                <div className="text-gray-300 leading-relaxed">
+                  Born with the soul of a poet and the mind of an engineer, I blend technical skill 
+                  with real-world purpose. From Jos, Nigeria to building platforms that solve actual problems.
                 </div>
                 <div className="mt-4">
                   <span className="text-green-400">const</span> <span className="text-white">passion</span> 
                   <span className="text-gray-400"> = </span>
-                  <span className="text-yellow-400">["coding", "learning", "innovation"]</span>
+                  <span className="text-yellow-400">["security", "innovation", "real_impact"]</span>
+                </div>
+                <div className="mt-2">
+                  <span className="text-green-400">const</span> <span className="text-white">level</span> 
+                  <span className="text-gray-400"> = </span>
+                  <span className="text-yellow-400">"Junior → Mid-Level"</span>
                 </div>
               </div>
             </div>

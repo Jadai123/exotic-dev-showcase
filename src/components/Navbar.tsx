@@ -28,7 +28,7 @@ const Navbar = () => {
           <div className="flex items-center space-x-2 group cursor-pointer">
             <Terminal className="w-6 h-6 text-green-400 group-hover:text-cyan-400 transition-colors" />
             <span className="text-xl font-bold font-mono text-green-400 group-hover:text-cyan-400 transition-colors">
-              {"<dev/>"}
+              {"<Hudson/>"}
             </span>
           </div>
 
