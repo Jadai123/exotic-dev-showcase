@@ -1,63 +1,43 @@
 
-import { useState, useEffect } from "react";
-import { Wallet, TrendingUp, Shield, Users, MessageSquare, ArrowUpDown, LogIn, LogOut } from "lucide-react";
+import { useState } from "react";
+import { Wallet, TrendingUp, Shield, ArrowUpDown, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import WalletValidationModal from "@/components/dapp/WalletValidationModal";
 import SwapInterface from "@/components/dapp/SwapInterface";
 import TopWallets from "@/components/dapp/TopWallets";
 import LiveStats from "@/components/dapp/LiveStats";
-import AuthModal from "@/components/dapp/AuthModal";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import type { User } from "@supabase/supabase-js";
 
 const DApp = () => {
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isSwapOpen, setIsSwapOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+  const handleNewsletterSignup = () => {
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address",
+        variant: "destructive"
+      });
+      return;
+    }
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      if (event === 'SIGNED_IN') {
-        toast({
-          title: "Welcome!",
-          description: "Successfully signed in to RevShield DApp",
-        });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [toast]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setConnectedWallet(null);
+    // Simulate newsletter signup
     toast({
-      title: "Signed Out",
-      description: "You have been successfully signed out",
+      title: "Submitted!",
+      description: "Thank you for subscribing to our newsletter",
     });
+    setEmail("");
+    setIsNewsletterOpen(false);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white">
@@ -72,39 +52,22 @@ const DApp = () => {
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              {user && (
-                <Button
-                  onClick={() => setIsSwapOpen(true)}
-                  variant="outline"
-                  className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10"
-                >
-                  <ArrowUpDown className="w-4 h-4 mr-2" />
-                  Swap
-                </Button>
-              )}
-              {user ? (
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-300">
-                    {user.email}
-                  </span>
-                  <Button
-                    onClick={handleSignOut}
-                    variant="outline"
-                    className="border-red-400/50 text-red-400 hover:bg-red-400/10"
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  onClick={() => setIsAuthModalOpen(true)}
-                  className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Sign In
-                </Button>
-              )}
+              <Button
+                onClick={() => setIsSwapOpen(true)}
+                variant="outline"
+                className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10"
+              >
+                <ArrowUpDown className="w-4 h-4 mr-2" />
+                Swap
+              </Button>
+              <Button
+                onClick={() => setIsNewsletterOpen(true)}
+                variant="outline"
+                className="border-purple-400/50 text-purple-400 hover:bg-purple-400/10"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Newsletter
+              </Button>
             </div>
           </div>
         </div>
@@ -119,17 +82,6 @@ const DApp = () => {
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Validate wallets, perform secure swaps, and protect yourself from crypto scams with our advanced dApp platform
           </p>
-          {!user && (
-            <div className="mt-8">
-              <Button
-                onClick={() => setIsAuthModalOpen(true)}
-                size="lg"
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-              >
-                Get Started - Sign Up Free
-              </Button>
-            </div>
-          )}
         </div>
 
         {/* Live Stats */}
@@ -149,10 +101,10 @@ const DApp = () => {
             </CardHeader>
             <CardContent>
               <Button 
-                onClick={() => user ? setIsWalletModalOpen(true) : setIsAuthModalOpen(true)}
+                onClick={() => setIsWalletModalOpen(true)}
                 className="w-full bg-gradient-to-r from-cyan-500 to-blue-500"
               >
-                {user ? "Validate Wallet" : "Sign In to Validate"}
+                Validate Wallet
               </Button>
             </CardContent>
           </Card>
@@ -169,10 +121,10 @@ const DApp = () => {
             </CardHeader>
             <CardContent>
               <Button 
-                onClick={() => user ? setIsSwapOpen(true) : setIsAuthModalOpen(true)}
+                onClick={() => setIsSwapOpen(true)}
                 className="w-full bg-gradient-to-r from-green-500 to-teal-500"
               >
-                {user ? "Start Swap" : "Sign In to Swap"}
+                Start Swap
               </Button>
             </CardContent>
           </Card>
@@ -189,10 +141,9 @@ const DApp = () => {
             </CardHeader>
             <CardContent>
               <Button 
-                disabled={!user}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
               >
-                {user ? "View Analytics" : "Sign In Required"}
+                View Analytics
               </Button>
             </CardContent>
           </Card>
@@ -202,26 +153,54 @@ const DApp = () => {
         <TopWallets />
       </div>
 
-      {/* Modals */}
-      <AuthModal 
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+      {/* Newsletter Modal */}
+      <Dialog open={isNewsletterOpen} onOpenChange={setIsNewsletterOpen}>
+        <DialogContent className="sm:max-w-md bg-gray-900 border-gray-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center text-purple-400">
+              <Mail className="w-5 h-5 mr-2" />
+              Newsletter Signup
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Stay updated with the latest crypto security news
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="newsletter-email">Email Address</Label>
+              <Input
+                id="newsletter-email"
+                type="email"
+                placeholder="your.email@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-gray-800 border-gray-600 text-white"
+              />
+            </div>
+
+            <Button 
+              onClick={handleNewsletterSignup}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
+            >
+              Subscribe to Newsletter
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Wallet Validation Modal */}
+      <WalletValidationModal 
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        onWalletConnected={setConnectedWallet}
       />
       
-      {user && (
-        <>
-          <WalletValidationModal 
-            isOpen={isWalletModalOpen}
-            onClose={() => setIsWalletModalOpen(false)}
-            onWalletConnected={setConnectedWallet}
-          />
-          
-          <SwapInterface 
-            isOpen={isSwapOpen}
-            onClose={() => setIsSwapOpen(false)}
-          />
-        </>
-      )}
+      {/* Swap Interface */}
+      <SwapInterface 
+        isOpen={isSwapOpen}
+        onClose={() => setIsSwapOpen(false)}
+      />
     </div>
   );
 };
